@@ -2,10 +2,13 @@
 #include "../drivers/screen.h"
 #include "kernel.h"
 #include "../libc/string.h"
-
-void main() {
+#include <stdint.h>
+void kernel_main() {
     isr_install();
 	irq_install();
+
+	asm("int $2");
+	asm("int $3");
 
 	clear_screen();
 
@@ -18,8 +21,8 @@ void user_input(char *input) {
 	kprint("Stopping the CPU. Bye\n");
 	asm volatile("hlt");
   } else if (strcomp(input, "PAGE") == 0) {
-	   u32 phys_addr;
-	   u32 page = kmalloc(1000, 1, &phys_addr);
+	   uint32_t phys_addr;
+	   uint32_t page = kmalloc(1000, 1, &phys_addr);
 	   char page_str[16] = "";
 	   hex_to_ascii(page, page_str);
 	   char phys_str[16] = "";
