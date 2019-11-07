@@ -18,7 +18,7 @@ int get_offset_col(int offset);
  * Print a message on the specified location
  * If col, row, are negative, we will use the current offset
  */
-void kprint_at(char *message, int col, int row) {
+void kprint_at(char *message, int col, int row, char attr) {
     /* Set cursor if col/row are negative */
     int offset;
     if (col >= 0 && row >= 0)
@@ -32,7 +32,7 @@ void kprint_at(char *message, int col, int row) {
     /* Loop through message and print it */
     int i = 0;
     while (message[i] != 0) {
-        offset = print_char(message[i++], col, row, WHITE_ON_BLACK);
+        offset = print_char(message[i++], col, row, attr);
         /* Compute row/col for next iteration */
         row = get_offset_row(offset);
         col = get_offset_col(offset);
@@ -40,7 +40,11 @@ void kprint_at(char *message, int col, int row) {
 }
 
 void kprint(char *message) {
-    kprint_at(message, -1, -1);
+	 kprint_at(message, -1, -1, WHITE_ON_BLACK);
+}
+
+void kprint_error(char *message) {
+	 kprint_at(message, -1, -1, RED_ON_BLACK);
 }
 
 void kprint_backspace() {
